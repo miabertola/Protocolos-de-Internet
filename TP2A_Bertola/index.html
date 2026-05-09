@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cliente WebSocket</title>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+</head>
+
+<body>
+
+    <h1>Cliente WebSocket</h1>
+
+    <p id="estado">Desconectado</p>
+
+    <input type="text" id="mensaje" placeholder="Escribí un mensaje">
+    <button onclick="enviarMensaje()">Enviar</button>
+
+    <h3>Mensajes:</h3>
+    <div id="mensajes"></div>
+
+    <script>
+        const socket = io();
+
+        const estado = document.getElementById("estado");
+        const mensajes = document.getElementById("mensajes");
+
+        socket.on('connect', () => {
+            estado.innerHTML = "Conectado";
+        });
+
+        socket.on('disconnect', () => {
+            estado.innerHTML = "Desconectado";
+        });
+
+        socket.on('message', (msg) => {
+            mensajes.innerHTML += `<p>${msg}</p>`;
+        });
+
+        function enviarMensaje() {
+            const input = document.getElementById("mensaje");
+
+            socket.send(input.value);
+
+            input.value = "";
+        }
+    </script>
+
+</body>
+</html>
